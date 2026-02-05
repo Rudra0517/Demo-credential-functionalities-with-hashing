@@ -23,7 +23,10 @@ const {
   userByIdController,
   testController,
 } = require("./controllers/usercontrollers");
-const { authorization } = require("./middleware/authmiddleware");
+const {
+  authorization,
+  authentication,
+} = require("./middleware/authmiddleware");
 
 //* test of authorization
 
@@ -33,7 +36,7 @@ app.get("/test", testController);
 app.get("/allusers", allUserController);
 
 //* fetch user by id
-app.get("/allusers/:id", userByIdController);
+app.get("/allusers/profile", authentication, userByIdController);
 
 //* register
 app.post("/register", registerController);
@@ -42,10 +45,10 @@ app.post("/register", registerController);
 app.post("/login", loginController);
 
 //* update user
-app.put("/updateuser/:id", updateUserController);
+app.put("/updateuser",authentication, updateUserController);
 
 //* Delete User
-app.delete("/deleteuser/:id", deleteuserController);
+app.delete("/deleteuser",authentication, deleteuserController);
 
 //* verify-email
 app.post("/verify-email", verifyEmailController);

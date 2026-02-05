@@ -6,12 +6,19 @@ import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [activeuser, setActiveUser] = useState({});
-  const token = JSON.parse(localStorage.getItem("jwt_token"));
 
-  const id = token.split(".")[1];
+  const token = JSON.parse(localStorage.getItem("jwt_token"));
+ 
   const fdata = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8080/allusers/${id}`);
+      const { data } = await axios.get(
+        `http://localhost:8080/allusers/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
       setActiveUser(data.data);
     } catch (error) {
       console.log(error);
@@ -20,7 +27,7 @@ const Profile = () => {
 
   useEffect(() => {
     fdata();
-  }, [id]);
+  }, []);
 
   return (
     <div className="h-auto w-full flex items-center justify-center bg-gray-100 px-4 ">

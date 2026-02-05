@@ -26,7 +26,7 @@ const Login = () => {
         formData,
       );
 
-      const token = data.token;
+      const token = data.jwt_token;
       if (token) {
         localStorage.setItem("jwt_token", JSON.stringify(token));
         toast.success("Logged in successfully");

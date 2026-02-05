@@ -58,9 +58,12 @@ const loginController = async (req, res) => {
       res.status(401).json({ message: "Incorrect password" });
     }
 
-    const token = "DFGhgcCGFGG." + user._id;
-
-    res.status(200).json({ message: "Login successfully", token });
+    const jwt_token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "7d" },
+    );
+    res.status(200).json({ message: "Login successfully", jwt_token });
   } catch (error) {
     res
       .status(500)
@@ -70,10 +73,9 @@ const loginController = async (req, res) => {
 
 const updateUserController = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.id;
     const _id = id;
     const data = req.body;
-    // console.log(data);
 
     const updatedData = await userModel.updateOne(
       { _id },
@@ -91,12 +93,16 @@ const updateUserController = async (req, res) => {
 };
 
 const deleteuserController = async (req, res) => {
-  const { id } = req.params;
-  // const _id = id;
+  try {
+    const id = req.id;
+    // const _id = id;
 
-  await userModel.deleteOne({ _id: id });
+    await userModel.deleteOne({ _id: id });
 
-  res.status(204).json({ message: "user Deleted successfully." });
+    res.status(204).json({ message: "user Deleted successfully." });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const verifyEmailController = async (req, res) => {
@@ -207,7 +213,7 @@ const allUserController = async (req, res) => {
 
 const userByIdController = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.id;
 
     const _id = id;
 

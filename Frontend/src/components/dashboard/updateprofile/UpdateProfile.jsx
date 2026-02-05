@@ -16,7 +16,7 @@ const UpdateProfile = () => {
 
   const token = JSON.parse(localStorage.getItem("jwt_token"));
 
-  const id = token.split(".")[1];
+  // const id = token.split(".")[1];
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -26,9 +26,11 @@ const UpdateProfile = () => {
   const deleteUser = async () => {
     try {
       if (confirm("Confirm that you want to delete profile?")) {
-        const data = await axios.delete(
-          `http://localhost:8080/deleteuser/${id}`,
-        );
+        const data = await axios.delete(`http://localhost:8080/deleteuser`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         navigate("/login");
       }
     } catch (error) {
@@ -37,20 +39,25 @@ const UpdateProfile = () => {
   };
 
   const fdata = async () => {
-    const { data } = await axios.get(`http://localhost:8080/allusers/${id}`);
+    const { data } = await axios.get(`http://localhost:8080/allusers/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setFormData(data.data);
   };
 
   useEffect(() => {
     fdata();
-  }, [id]);
+  }, []);
 
   const handleForm = async (e) => {
     e.preventDefault();
-    const data = await axios.put(
-      `http://localhost:8080/updateuser/${id}`,
-      formData,
-    );
+    const data = await axios.put(`http://localhost:8080/updateuser`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     toast.success("User data updated successfully.");
     navigate("/dashboard");
