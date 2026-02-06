@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   image_url: String,
   city: String,
   OTP: String,
+  role: String,
 });
 
 const userModel = mongoose.model("users", userSchema);

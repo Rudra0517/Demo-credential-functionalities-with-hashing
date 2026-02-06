@@ -10,7 +10,7 @@ const testController = (req, res) => {
 
 const registerController = async (req, res) => {
   try {
-    const { username, email, age, gender, image_url, password, city } =
+    const { username, email, age, gender, image_url, password, city, role } =
       req.body;
 
     const isExists = await userModel.findOne({ email: email });
@@ -30,6 +30,7 @@ const registerController = async (req, res) => {
       image_url,
       password: hashPassword,
       city,
+      role,
     });
     sendMessageViaMail(
       email,
@@ -59,7 +60,7 @@ const loginController = async (req, res) => {
     }
 
     const jwt_token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "7d" },
     );
@@ -76,7 +77,7 @@ const updateUserController = async (req, res) => {
     const id = req.id;
     const _id = id;
     const data = req.body;
-
+    const user = await userModel.findById(id);
     const updatedData = await userModel.updateOne(
       { _id },
       {
@@ -85,6 +86,11 @@ const updateUserController = async (req, res) => {
           ...data,
         },
       },
+    );
+    sendMessageViaMail(
+      user.email,
+      "profile update",
+      "Profile data updated successfully",
     );
     res.status(200).json({ message: "user is updated successfully." });
   } catch (error) {
@@ -221,7 +227,7 @@ const userByIdController = async (req, res) => {
     if (!currentUser) {
       return res.json({ message: "User not found" });
     }
-    res.status(200).json({ data: currentUser });
+    res.status(200).json(currentUser);
   } catch (error) {
     res
       .status(500)

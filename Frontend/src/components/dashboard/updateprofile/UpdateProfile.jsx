@@ -12,6 +12,7 @@ const UpdateProfile = () => {
     image_url: "",
     gender: "",
     city: "",
+    role: "",
   });
 
   const token = JSON.parse(localStorage.getItem("jwt_token"));
@@ -44,7 +45,7 @@ const UpdateProfile = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    setFormData(data.data);
+    setFormData(data);
   };
 
   useEffect(() => {
@@ -82,7 +83,6 @@ const UpdateProfile = () => {
             value={formData.username}
             onChange={handleInput}
             className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -93,7 +93,6 @@ const UpdateProfile = () => {
               value={formData.age}
               onChange={handleInput}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
 
             <select
@@ -101,7 +100,6 @@ const UpdateProfile = () => {
               value={formData.gender}
               onChange={handleInput}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             >
               <option value="">Gender</option>
               <option value="male">Male</option>
@@ -109,19 +107,23 @@ const UpdateProfile = () => {
               <option value="other">Other</option>
             </select>
           </div>
-
+          <div>
+            <input
+              type="text"
+              name="role"
+              value={formData.role}
+              readOnly
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
           <input
-            type="email"
             name="email"
-            placeholder="Email Address"
+            readOnly
             value={formData.email}
-            onChange={handleInput}
             className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
 
           <input
-            type="text"
             name="image_url"
             placeholder="Profile Image URL"
             value={formData.image_url}

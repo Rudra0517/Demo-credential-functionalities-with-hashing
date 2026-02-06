@@ -12,6 +12,7 @@ const Register = () => {
     image_url: "",
     gender: "",
     city: "",
+    role: "",
   });
   const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ const Register = () => {
 
   const handleForm = async (e) => {
     e.preventDefault();
+    console.log(formData);
     try {
       await axios.post("http://localhost:8080/register", formData);
 
@@ -34,6 +36,7 @@ const Register = () => {
         image_url: "",
         gender: "",
         city: "",
+        role: "",
       });
       navigate("/login");
     } catch (error) {
@@ -55,9 +58,7 @@ const Register = () => {
         onSubmit={handleForm}
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-md text-black"
       >
-        <h2 className="text-2xl font-bold text-center mb-6 ">
-          Registration
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-6 ">Registration</h2>
 
         <input
           type="text"
@@ -119,6 +120,18 @@ const Register = () => {
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Other</option>
+        </select>
+
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleInput}
+          className="w-full mb-3 p-2 border rounded"
+          required
+        >
+          <option value="">Select Role</option>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
         </select>
 
         <input
